@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Search</title>
+    <!-- <link rel="stylesheet" href="/static/styles.css"> -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .search-bar {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px 0 0 4px;
+        }
+
+        .search-bar button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .search-bar button:hover {
+            background-color: #0056b3;
+        }
+
+        .product-list {
+            margin-top: 20px;
+        }
+
+        .product-item {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .product-item h3 {
+            margin: 0 0 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Product Search</h1>
+        <form id="search-form" class="search-bar">
+            <input type="text" id="query" name="query" placeholder="Search for products..." value="{{ query }}">
+            <button type="submit">Search</button>
+        </form>
+        <div id="results" class="product-list">
+            {% if products %}
+            {% for product in products %}
+            <div class="product-item">
+                <h3>{{ product.name }}</h3>
+                <p><strong>Price:</strong> ${{ product.price }}</p>
+                <p><strong>Description:</strong> {{ product.description }}</p>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>No products found.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("search-form").addEventListener("submit", async function (e) {
+            e.preventDefault(); // Prevent form submission
+
+            const query = document.getElementById("query").value.trim();
+            if (!query) {
+                alert("Please enter a search query.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`/search?query=${encodeURIComponent(query)}`);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch search results.");
+                }
+                const html = await response.text();
+                document.getElementById("results").innerHTML = new DOMParser()
+                    .parseFromString(html, "text/html")
+                    .querySelector("#results").innerHTML;
+            } catch (error) {
+                console.error(error);
+                document.getElementById("results").innerHTML = `<p>An error occurred while fetching search results.</p>`;
+            }
+        });
+    </script>
+</body>
+
+</html>

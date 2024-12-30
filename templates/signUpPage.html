@@ -1,0 +1,172 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="/static/signUpPage.css">
+</head>
+
+<body>
+    <div class="signup-container">
+        <h2>Sign Up</h2>
+        <form>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit">Sign Up</button>
+        </form>
+        <p>Already have an account? <a href="/login">Log in</a></p>
+    </div>
+
+    <script src="/static/signUpPage.js"></script>
+</body>
+
+</html> -->
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="/static/signUpPage.css">
+</head>
+
+<body>
+    <main class="signup-container">
+        <h1>Sign Up</h1>
+     
+        <form action="/signup" method="POST" class="signup-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required
+                    aria-required="true">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required
+                    aria-required="true">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required
+                    aria-required="true">
+            </div>
+            <button type="submit" class="signup-button">Sign Up</button>
+        </form>
+        <p class="login-redirect">
+            Already have an account? <a href="/login" class="login-link">Log in</a>
+        </p>
+    </main>
+
+    <script src="/static/signUpPage.js" defer></script>
+</body>
+
+</html> -->
+
+<!-- 
+########################################################################################################################  -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Page</title>
+    <!-- <link rel="stylesheet" href="/static/styles.css"> Assuming your styles.css is here -->
+</head>
+
+<body>
+    <div class="container">
+        <h2>Create an Account</h2>
+
+        <form class="signup-form" id="signup-form">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Sign Up</button>
+            </div>
+        </form>
+
+        <div class="footer">
+            <p>Already have an account? <a href="/login">Login here</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const signupForm = document.querySelector(".signup-form");
+
+            // Handle form submission
+            signupForm.addEventListener("submit", async (event) => {
+                event.preventDefault(); // Prevent default form submission
+
+                // Gather form data
+                const username = document.getElementById("username").value.trim();
+                const email = document.getElementById("email").value.trim();
+                const password = document.getElementById("password").value.trim();
+
+                // Validate form data (basic validation)
+                if (!username || !email || !password) {
+                    alert("All fields are required!");
+                    return;
+                }
+
+                // Create payload
+                const payload = {
+                    username: username,
+                    email: email,
+                    password: password,
+                };
+
+                try {
+                    // Send POST request to FastAPI backend
+                    const response = await fetch("/signup", {  // Changed /signup_post to /signup
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(payload),
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        alert(data.message); // Display success message
+                        window.location.href = "/login";  // Redirect to login page after successful signup
+                    } else {
+                        const errorData = await response.json();
+                        alert(errorData.detail || "An error occurred during signup.");
+                    }
+                } catch (error) {
+                    console.error("Error during signup:", error);
+                    alert("Failed to sign up. Please try again later.");
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
